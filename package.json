@@ -11,8 +11,10 @@
     "test": "npm run test -w packages/backend && npm run test -w packages/frontend"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
     "concurrently": "^9.1.0",
     "drizzle-orm": "^0.45.2",
+    "jsdom": "^25.0.0",
     "lodash": "^4.17.21",
     "typescript": "^5.6.0"
   }

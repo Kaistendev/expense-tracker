@@ -70,10 +70,12 @@ npm run build -w packages/frontend  # Vite production build
 ## Features
 
 - **Auth**: Register/login with JWT, protected routes
+- **Settings**: Edit display name, change password (with current-password verification), and light/dark mode toggle (persisted in localStorage)
 - **Expenses & Income**: CRUD with type toggle (income/expense), search, filter by category, pagination
 - **Categories**: CRUD with icon and color
 - **Dashboard**: Monthly summary with income/expense/balance cards, category pie chart, month-over-month comparison bar chart
 - **Responsive**: Mobile sidebar (Sheet), desktop fixed sidebar
+- **Dark mode**: Toggle in the top bar and in Settings, follows system preference by default
 
 ## Architecture
 

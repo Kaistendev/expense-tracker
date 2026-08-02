@@ -1,19 +1,12 @@
 import { useState, useCallback } from "react";
 import { dashboardApi } from "../../infrastructure/api";
+import { getErrorMessage } from "./getErrorMessage";
 import type { MonthlySummary } from "../../core/types";
 
 interface DashboardState {
   summary: MonthlySummary | null;
   loading: boolean;
   error: string | null;
-}
-
-function getErrorMessage(err: unknown): string {
-  if (err && typeof err === "object" && "response" in err) {
-    const axiosErr = err as { response?: { data?: { error?: string } } };
-    return axiosErr.response?.data?.error ?? "An error occurred";
-  }
-  return "An error occurred";
 }
 
 export function useDashboard() {

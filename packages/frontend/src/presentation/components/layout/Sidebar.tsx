@@ -3,12 +3,13 @@ import { cn } from "../../lib/utils";
 import { Button } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
-import { LayoutDashboard, Wallet, Tags, Menu } from "lucide-react";
+import { LayoutDashboard, Wallet, Tags, Settings, Menu } from "lucide-react";
 
 const links = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
   { to: "/expenses", label: "Expenses", icon: Wallet },
   { to: "/categories", label: "Categories", icon: Tags },
+  { to: "/settings", label: "Settings", icon: Settings },
 ];
 
 function SidebarContent() {

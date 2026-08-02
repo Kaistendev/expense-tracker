@@ -3,7 +3,7 @@ import { useExpenses, useCategories } from "../../application/hooks";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../components/ui/dialog";
 import { Label } from "../components/ui/label";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
@@ -19,6 +19,7 @@ export function ExpensesPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const [form, setForm] = useState({ amount: "", description: "", date: "", type: "expense" as "income" | "expense", categoryId: "" });
 
@@ -38,6 +39,7 @@ export function ExpensesPage() {
   const resetForm = useCallback(() => {
     setForm({ amount: "", description: "", date: "", type: "expense", categoryId: "" });
     setEditingId(null);
+    setFormError(null);
   }, []);
 
   const handleOpenChange = useCallback((open: boolean) => {
@@ -59,6 +61,18 @@ export function ExpensesPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const amountNumber = Number(form.amount);
+    if (!amountNumber || amountNumber <= 0) {
+      setFormError("Please enter an amount greater than zero.");
+      return;
+    }
+    if (!form.categoryId) {
+      setFormError("Please select a category.");
+      return;
+    }
+    setFormError(null);
+
     try {
       if (editingId) {
         await updateExpense(editingId, {
@@ -103,6 +117,7 @@ export function ExpensesPage() {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>{editingId ? "Edit Expense" : "Add Expense"}</DialogTitle>
+              <DialogDescription>Record an income or expense transaction.</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
@@ -143,6 +158,10 @@ export function ExpensesPage() {
                 {editingId ? "Update" : "Create"}
               </Button>
             </form>
+            {!form.categoryId && (
+              <p className="text-xs text-muted-foreground">You must select a category to save.</p>
+            )}
+            {formError && <p className="text-sm text-destructive">{formError}</p>}
           </DialogContent>
         </Dialog>
       </div>
@@ -210,7 +229,7 @@ export function ExpensesPage() {
                         {expense.type === "income" ? "Income" : "Expense"}
                       </Badge>
                     </TableCell>
-                    <TableCell className={`text-right font-medium ${expense.type === "income" ? "text-green-600" : ""}`}>
+                    <TableCell className={`text-right font-medium ${expense.type === "income" ? "text-green-600 dark:text-green-400" : ""}`}>
                       {expense.type === "income" ? "+" : "-"}${expense.amount.toFixed(2)}
                     </TableCell>
                     <TableCell>

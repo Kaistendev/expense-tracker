@@ -1,8 +1,17 @@
 export {
   RegisterUserSchema,
   LoginSchema,
+  UpdateProfileSchema,
+  ChangePasswordSchema,
 } from "./auth.dto";
-export type { RegisterUserDto, LoginDto, AuthResponse } from "./auth.dto";
+export type {
+  RegisterUserDto,
+  LoginDto,
+  UpdateProfileDto,
+  ChangePasswordDto,
+  AuthResponse,
+  UserProfileResponse,
+} from "./auth.dto";
 
 export {
   CreateCategorySchema,

@@ -1,6 +1,13 @@
 import { useState, useCallback } from "react";
 import { authApi } from "../../infrastructure/api";
-import type { AuthUser, LoginRequest, RegisterRequest } from "../../core/types";
+import { getErrorMessage } from "./getErrorMessage";
+import type {
+  AuthUser,
+  LoginRequest,
+  RegisterRequest,
+  UpdateProfileRequest,
+  ChangePasswordRequest,
+} from "../../core/types";
 
 interface AuthState {
   user: AuthUser | null;
@@ -9,18 +16,22 @@ interface AuthState {
   error: string | null;
 }
 
-function getErrorMessage(err: unknown): string {
-  if (err && typeof err === "object" && "response" in err) {
-    const axiosErr = err as { response?: { data?: { error?: string } } };
-    return axiosErr.response?.data?.error ?? "An error occurred";
+const TOKEN_KEY = "token";
+const USER_KEY = "user";
+
+function readStoredUser(): AuthUser | null {
+  try {
+    const raw = localStorage.getItem(USER_KEY);
+    return raw ? (JSON.parse(raw) as AuthUser) : null;
+  } catch {
+    return null;
   }
-  return "An error occurred";
 }
 
 export function useAuth() {
   const [state, setState] = useState<AuthState>(() => ({
-    user: null,
-    token: localStorage.getItem("token"),
+    user: readStoredUser(),
+    token: localStorage.getItem(TOKEN_KEY),
     loading: false,
     error: null,
   }));
@@ -29,7 +40,8 @@ export function useAuth() {
     setState((s) => ({ ...s, loading: true, error: null }));
     try {
       const res = await authApi.register(data);
-      localStorage.setItem("token", res.token);
+      localStorage.setItem(TOKEN_KEY, res.token);
+      localStorage.setItem(USER_KEY, JSON.stringify(res.user));
       setState({ user: res.user, token: res.token, loading: false, error: null });
       return res;
     } catch (err) {
@@ -43,7 +55,8 @@ export function useAuth() {
     setState((s) => ({ ...s, loading: true, error: null }));
     try {
       const res = await authApi.login(data);
-      localStorage.setItem("token", res.token);
+      localStorage.setItem(TOKEN_KEY, res.token);
+      localStorage.setItem(USER_KEY, JSON.stringify(res.user));
       setState({ user: res.user, token: res.token, loading: false, error: null });
       return res;
     } catch (err) {
@@ -53,8 +66,36 @@ export function useAuth() {
     }
   }, []);
 
+  const updateProfile = useCallback(async (data: UpdateProfileRequest) => {
+    setState((s) => ({ ...s, loading: true, error: null }));
+    try {
+      const res = await authApi.updateProfile(data);
+      localStorage.setItem(USER_KEY, JSON.stringify(res.user));
+      setState((s) => ({ ...s, user: res.user, loading: false, error: null }));
+      return res;
+    } catch (err) {
+      const error = getErrorMessage(err);
+      setState((s) => ({ ...s, loading: false, error }));
+      throw err;
+    }
+  }, []);
+
+  const changePassword = useCallback(async (data: ChangePasswordRequest) => {
+    setState((s) => ({ ...s, loading: true, error: null }));
+    try {
+      const res = await authApi.changePassword(data);
+      setState((s) => ({ ...s, loading: false, error: null }));
+      return res;
+    } catch (err) {
+      const error = getErrorMessage(err);
+      setState((s) => ({ ...s, loading: false, error }));
+      throw err;
+    }
+  }, []);
+
   const logout = useCallback(() => {
-    localStorage.removeItem("token");
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
     setState({ user: null, token: null, loading: false, error: null });
   }, []);
 
@@ -66,6 +107,8 @@ export function useAuth() {
     isAuthenticated: !!state.token,
     register,
     login,
+    updateProfile,
+    changePassword,
     logout,
   };
 }

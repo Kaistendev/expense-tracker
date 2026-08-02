@@ -44,6 +44,11 @@ export class User {
     this.props.updatedAt = new Date();
   }
 
+  updatePassword(passwordHash: string): void {
+    this.props.passwordHash = passwordHash;
+    this.props.updatedAt = new Date();
+  }
+
   equals(other: User): boolean {
     return this.props.id.equals(other.props.id);
   }

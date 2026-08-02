@@ -83,10 +83,10 @@ export function DashboardPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">Total Income</CardTitle>
-                <TrendingUp className="h-4 w-4 text-green-500" />
+                <TrendingUp className="h-4 w-4 text-green-500 dark:text-green-400" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-green-600">+${summary.totalIncome.toFixed(2)}</div>
+                <div className="text-2xl font-bold text-green-600 dark:text-green-400">+${summary.totalIncome.toFixed(2)}</div>
               </CardContent>
             </Card>
             <Card>
@@ -102,13 +102,13 @@ export function DashboardPage() {
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">Balance</CardTitle>
                 {summary.balance >= 0 ? (
-                  <TrendingUp className="h-4 w-4 text-green-500" />
+                  <TrendingUp className="h-4 w-4 text-green-500 dark:text-green-400" />
                 ) : (
-                  <TrendingDown className="h-4 w-4 text-red-500" />
+                  <TrendingDown className="h-4 w-4 text-red-500 dark:text-red-400" />
                 )}
               </CardHeader>
               <CardContent>
-                <div className={`text-2xl font-bold ${summary.balance >= 0 ? "text-green-600" : "text-red-600"}`}>
+                <div className={`text-2xl font-bold ${summary.balance >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
                   {summary.balance >= 0 ? "+" : ""}${summary.balance.toFixed(2)}
                 </div>
               </CardContent>
@@ -119,7 +119,7 @@ export function DashboardPage() {
                 <PieChartIcon className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className={`text-2xl font-bold ${summary.percentageChange >= 0 ? "text-red-600" : "text-green-600"}`}>
+                <div className={`text-2xl font-bold ${summary.percentageChange >= 0 ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`}>
                   {summary.percentageChange >= 0 ? "+" : ""}{summary.percentageChange.toFixed(1)}%
                 </div>
               </CardContent>

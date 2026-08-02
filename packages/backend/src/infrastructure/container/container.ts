@@ -7,6 +7,8 @@ import { ConsoleLogger } from "../logger";
 import {
   RegisterUserUseCase,
   LoginUseCase,
+  UpdateProfileUseCase,
+  ChangePasswordUseCase,
   CreateCategoryUseCase,
   ListCategoriesUseCase,
   UpdateCategoryUseCase,
@@ -29,6 +31,8 @@ const logger = new ConsoleLogger();
 
 const registerUser = new RegisterUserUseCase(userRepo, authService, logger);
 const loginUser = new LoginUseCase(userRepo, authService, logger);
+const updateProfile = new UpdateProfileUseCase(userRepo, logger);
+const changePassword = new ChangePasswordUseCase(userRepo, authService, logger);
 const createCategory = new CreateCategoryUseCase(categoryRepo);
 const listCategories = new ListCategoriesUseCase(categoryRepo);
 const updateCategory = new UpdateCategoryUseCase(categoryRepo);
@@ -56,6 +60,8 @@ function resolve<T>(cls: new (...args: any[]) => T): T {
 
 register(RegisterUserUseCase, registerUser);
 register(LoginUseCase, loginUser);
+register(UpdateProfileUseCase, updateProfile);
+register(ChangePasswordUseCase, changePassword);
 register(CreateCategoryUseCase, createCategory);
 register(ListCategoriesUseCase, listCategories);
 register(UpdateCategoryUseCase, updateCategory);

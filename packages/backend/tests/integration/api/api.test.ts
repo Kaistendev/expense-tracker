@@ -65,6 +65,58 @@ describe("API Integration", () => {
     expect(res.status).toBe(401);
   });
 
+  it("PUT /api/auth/me updates the profile name", async () => {
+    const res = await request(app)
+      .put("/api/auth/me")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ name: "Updated User" });
+
+    expect(res.status).toBe(200);
+    expect(res.body.user.name).toBe("Updated User");
+    expect(res.body.user.email).toBe("test@example.com");
+  });
+
+  it("PUT /api/auth/me requires authentication", async () => {
+    const res = await request(app).put("/api/auth/me").send({ name: "No Token" });
+    expect(res.status).toBe(401);
+  });
+
+  it("PUT /api/auth/password changes the password", async () => {
+    const res = await request(app)
+      .put("/api/auth/password")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ currentPassword: "123456", newPassword: "654321", confirmPassword: "654321" });
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+  });
+
+  it("PUT /api/auth/password rejects wrong current password", async () => {
+    const res = await request(app)
+      .put("/api/auth/password")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ currentPassword: "wrong", newPassword: "654321", confirmPassword: "654321" });
+
+    expect(res.status).toBe(401);
+  });
+
+  it("PUT /api/auth/password rejects mismatched confirmation", async () => {
+    const res = await request(app)
+      .put("/api/auth/password")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ currentPassword: "654321", newPassword: "654321", confirmPassword: "other" });
+
+    expect(res.status).toBe(400);
+  });
+
+  it("logs in with the new password after change", async () => {
+    const res = await request(app)
+      .post("/api/auth/login")
+      .send({ email: "test@example.com", password: "654321" });
+
+    expect(res.status).toBe(200);
+  });
+
   it("POST /api/categories creates a category", async () => {
     const res = await request(app)
       .post("/api/categories")

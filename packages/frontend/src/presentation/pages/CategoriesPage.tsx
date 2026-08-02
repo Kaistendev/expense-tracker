@@ -3,7 +3,7 @@ import { useCategories } from "../../application/hooks";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../components/ui/dialog";
 import { Card, CardContent } from "../components/ui/card";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 
@@ -66,6 +66,7 @@ export function CategoriesPage() {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>{editingId ? "Edit Category" : "Add Category"}</DialogTitle>
+              <DialogDescription>Give your category a name, icon and color.</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">

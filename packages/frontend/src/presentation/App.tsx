@@ -6,6 +6,7 @@ import { RegisterPage } from "./pages/RegisterPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { ExpensesPage } from "./pages/ExpensesPage";
 import { CategoriesPage } from "./pages/CategoriesPage";
+import { SettingsPage } from "./pages/SettingsPage";
 
 export function App() {
   return (
@@ -18,6 +19,7 @@ export function App() {
             <Route index element={<DashboardPage />} />
             <Route path="expenses" element={<ExpensesPage />} />
             <Route path="categories" element={<CategoriesPage />} />
+            <Route path="settings" element={<SettingsPage />} />
           </Route>
         </Route>
       </Routes>

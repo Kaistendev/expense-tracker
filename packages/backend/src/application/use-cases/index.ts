@@ -1,5 +1,7 @@
 export { RegisterUserUseCase } from "./auth/register-user.usecase";
 export { LoginUseCase } from "./auth/login.usecase";
+export { UpdateProfileUseCase } from "./auth/update-profile.usecase";
+export { ChangePasswordUseCase } from "./auth/change-password.usecase";
 export { CreateCategoryUseCase } from "./category/create-category.usecase";
 export { ListCategoriesUseCase } from "./category/list-categories.usecase";
 export { UpdateCategoryUseCase } from "./category/update-category.usecase";
